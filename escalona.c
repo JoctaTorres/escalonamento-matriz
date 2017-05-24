@@ -1,114 +1,74 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#define li 3
+#define co 4
 
-int main()
+int main( int argc, char *argv[] )
 {
-    int li, co; // linha e coluna
-    int il, ic; // ind.Linha e ind.Coluna
-S:
-    system("clear");
-    printf("\n DIGITE A DIMENSAO DA MATRIZ. \n LINHAS :: ");
-    scanf(" %d", &li);
-    printf(" COLUNA :: ");
-    scanf(" %d", &co);
-    if(li<co-1)
-    {
-        printf("\n NUMERO DE EQUACOES INSUFICIENTE. TENTE DE NOVO : ");
-        goto S;
-    }
+    double matrix[li][co];
+    int il, ic; // aux. variables for line and column
+    int lo, ld, oc; // aux. variables for transposition of two lines
+    double laux[co]; // auxiliary line for transposition
+    int ia; //aux. variable for casting sting to double
+    double aux, k; //aux. variables for solving the matrix
 
-    system("clear");
-    float matriz[li][co];
-    for(il=0 ; il<li ; il++ ) // lendo a matriz
+    for(ia=1, il=0; il<li; il++) // string to double
     {
-        for(ic=0; ic<co; ic++ )
+        for(ic=0; ic<co; ic++, ia++)
         {
-            printf("\n VALOR DO ELEMENTO LINHA [%d] COLUNA[%d] = ",il+1, ic+1);
-            scanf(" %f", &matriz[il][ic]);
-
+            matrix[il][ic]=atof(argv[ia]);
         }
     }
 
-    system("clear");
-    printf("\n A MATRIZ AMPLIADA DO SISTEMA :: \n");
-
-    for(il=0 ; il<li ; il++ ) // imprimindo a matriz
-    {
-        printf("\n");
-        for(ic=0; ic<co; ic++ )
-        {
-            //matriz[il][ic]=0;
-            printf(" \t%.2f", matriz[il][ic]);
-        }
-
-    }
-
-    int lo, ld, oc, n;
-    float laux[co];
-    float aux, k;
-
-    for(ic= 0, il=0; il<li; ic++, ++il) //**
+    for(ic= 0, il=0; il<li; ic++, ++il) // main loop for solving the matrix
     {
 
-        if (matriz[il][ic]==0) // caso permuta
+        if (matrix[il][ic]==0) // transposition of two lines
         {
 
-            for(lo=il; lo<li; lo++) //acha na coluna um número não nulo
+            for(lo=il; lo<li; lo++) //finds in the determined column a number different than zero
             {
-                if(matriz[lo][ic]!=0)
+                if(matrix[lo][ic]!=0)
                     ld=lo;
             }
-            for(oc=0; oc<co; oc++) //realiza a permuta
+            for(oc=0; oc<co; oc++) // transposition
             {
-                laux[oc] = matriz[il][oc];
-                matriz[il][oc] = matriz[ld][oc];
-                matriz[ld][oc] = laux[oc];
+                laux[oc] = matrix[il][oc];
+                matrix[il][oc] = matrix[ld][oc];
+                matrix[ld][oc] = laux[oc];
             }
 
         }
 
-        //coloca o um
-        aux=matriz[il][ic];
+        //setting the first not null element of the line as a one
+        aux=matrix[il][ic];
         for(oc=ic; oc<co; oc++)
         {
-            matriz[il][oc]/=aux;
+            matrix[il][oc]/=aux;
         }
 
-        //zera os demais elementos da coluna
+        //nulling the other elements of the column
         for (lo=il+1; lo<li; lo++)
         {
-            k=-matriz[lo][ic];
-            for(oc=ic; oc<co; oc++) //numa linha aux. copia e opera a linha sendo trabalhada
+            k=-matrix[lo][ic];
+            for(oc=ic; oc<co; oc++) //using an auxiliary line: copies and operate given line
             {
-                laux[oc] = matriz[il][oc];
+                laux[oc] = matrix[il][oc];
                 laux[oc]*=k;
-                matriz[lo][oc]+=laux[oc];
+                matrix[lo][oc]+=laux[oc];
             }
-
         }
     }
 
-    printf("\n\n A MATRIZ ESCALONADA DO SISTEMA :: \n");
-
-    for(il=0 ; il<li ; il++ ) // imprimindo a matriz
+    /*printf("\n\n SOLVED MATRIX :: \n"); //printing the matrix
+    for(il=0 ; il<li ; il++ )
     {
         printf("\n");
         for(ic=0; ic<co; ic++ )
         {
-            //matriz[il][ic]=0;
-            printf(" \t%.2f", matriz[il][ic]);
+            printf(" \t%.2f", matrix[il][ic]);
         }
+    }*/
 
-    }
-    char r;
-    printf("\n\n DESEJA REPETIR? [S/N] : ");
-    scanf(" %c", &r); r=toupper(r);
-    if(r=='S')
-        goto S;
-    return 0;
-
+    return matrix;
 }
-//1 1 1 7
-//2 1 -1 9
-//0 -3 1 -5
