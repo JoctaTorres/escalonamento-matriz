@@ -1,16 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define li 3
-#define co 4
 
 int main( int argc, char *argv[] )
 {
-    double matrix[li][co];
+	int li, co;   // number of lines and columns
     int il, ic; // aux. variables for line and column
     int lo, ld, oc; // aux. variables for transposition of two lines
     double laux[co]; // auxiliary line for transposition
     int ia; //aux. variable for casting sting to double
     double aux, k; //aux. variables for solving the matrix
+    
+    li=atof(argv[1]); // first argv represents the number of lines
+	co=atof(argv[2]); // second argv represents the number of lines
+    double matrix[li][co];
 
     for(ia=1, il=0; il<li; il++) // string to double
     {
@@ -59,7 +61,6 @@ int main( int argc, char *argv[] )
             }
         }
     }
-
     /*printf("\n\n SOLVED MATRIX :: \n"); //printing the matrix
     for(il=0 ; il<li ; il++ )
     {
@@ -69,6 +70,5 @@ int main( int argc, char *argv[] )
             printf(" \t%.2f", matrix[il][ic]);
         }
     }*/
-
     return matrix;
 }
